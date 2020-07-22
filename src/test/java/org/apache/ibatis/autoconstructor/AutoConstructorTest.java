@@ -16,6 +16,10 @@
 package org.apache.ibatis.autoconstructor;
 
 import org.apache.ibatis.BaseDataTest;
+import org.apache.ibatis.autoconstructor.hshp.ArticleDO;
+import org.apache.ibatis.autoconstructor.hshp.ArticleDao;
+import org.apache.ibatis.autoconstructor.hshp.AuthorDO;
+import org.apache.ibatis.autoconstructor.hshp.AuthorDao;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.ExecutorType;
@@ -183,6 +187,36 @@ public class AutoConstructorTest {
             }
             // 提交批量操作
             session.commit();
+        }
+    }
+
+    @Test
+    public void testOne2One() {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            ArticleDao articleDao = session.getMapper(ArticleDao.class);
+            ArticleDO article = articleDao.findOne(1);
+            System.out.println(article);
+
+           /* AuthorDO author = article.getAuthor();
+            System.out.println(author);*/
+        } finally {
+            session.close();
+        }
+    }
+
+    @Test
+    public void testOne2Many() {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            AuthorDao authorDao = session.getMapper(AuthorDao.class);
+            AuthorDO author = authorDao.findOne(1);
+            System.out.println(author);
+
+            List<ArticleDO> arts = author.getArticles();
+            System.out.println(arts);
+        } finally {
+            session.close();
         }
     }
 
