@@ -212,9 +212,18 @@ public class AutoConstructorTest {
             AuthorDao authorDao = session.getMapper(AuthorDao.class);
             AuthorDO author = authorDao.findOne(1);
             System.out.println(author);
+        } finally {
+            session.close();
+        }
+    }
 
-            List<ArticleDO> arts = author.getArticles();
-            System.out.println(arts);
+    @Test
+    public void test() {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            ArticleDao articleDao = session.getMapper(ArticleDao.class);
+            List<ArticleDO> article = articleDao.findByIdAndTitle(1,"Spring源码");
+            System.out.println(article);
         } finally {
             session.close();
         }

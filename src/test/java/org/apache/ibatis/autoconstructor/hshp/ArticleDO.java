@@ -14,7 +14,6 @@ public class ArticleDO implements Serializable {
     private Integer id;
     private String title;
     private ArticleTypeEnum type;
-    private AuthorDO author;
     private String content;
     private Date createTime;
 }

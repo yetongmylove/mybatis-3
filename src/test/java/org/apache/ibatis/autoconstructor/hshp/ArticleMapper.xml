@@ -5,7 +5,14 @@
 
 <mapper namespace="org.apache.ibatis.autoconstructor.hshp.ArticleDao">
 
-    <resultMap id="authorResult" type="Author">
+    <resultMap id="articleResult" type="Article">
+        <id property="id" column="id" />
+        <result property="title" column="title"/>
+        <result property="type" column="type" typeHandler="org.apache.ibatis.autoconstructor.hshp.ArticleTypeHandler"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <!--<resultMap id="authorResult" type="Author">
         <id property="id" column="author_id"/>
         <result property="name" column="name"/>
         <result property="age" column="age"/>
@@ -19,7 +26,7 @@
         <result property="type" column="type" typeHandler="org.apache.ibatis.autoconstructor.hshp.ArticleTypeHandler"/>
         <result property="content" column="content"/>
         <result property="createTime" column="create_time"/>
-        <!--<association property="author" javaType="Author" resultMap="authorResult"/>-->
+       <association property="author" javaType="Author" resultMap="authorResult"/>
     </resultMap>
 
     <select id="findOne" resultMap="articleResult">
@@ -30,5 +37,18 @@
             article ar, author au
         WHERE
             ar.author_id = au.id AND ar.id = #{id}
+    </select>-->
+    <sql id="tableName">${alias}</sql>
+
+    <select id="findByIdAndTitle" resultMap="articleResult">
+        SELECT
+            id, title, type, content, create_time
+        FROM
+        <include refid="tableName"><property name="alias" value="article"/></include>
+        WHERE
+            id = #{id}
+        <if test="title != null">
+            and title=#{title}
+        </if>
     </select>
 </mapper>
